@@ -392,12 +392,12 @@ namespace BeachScouter
                     {
                         if (nextFrame != null)
                         {
-                            pictureBox_livevideo.Image = nextFrame.ToBitmap();
+                            
                             if (new_move)
-                            {
-                                //videoWriter.WriteFrame(nextFrame);
                                 Emgu.CV.CvInvoke.cvWriteFrame(videoWriter, nextFrame);
-                            }
+                            
+                            pictureBox_livevideo.Image = nextFrame.ToBitmap();
+
                         }
                     }
                     catch (ArgumentException) { Console.WriteLine("EXCEPTION: ArgumentException"); }

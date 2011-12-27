@@ -11,6 +11,9 @@ namespace BeachScouter
 {
     public partial class InitialForm : Form
     {
+        private Form_Main game_form;
+
+
         public InitialForm()
         {
             InitializeComponent();
@@ -28,5 +31,13 @@ namespace BeachScouter
         {
             Application.Exit();
         }
+
+   
+
+
+
+      
+
+
     }
 }

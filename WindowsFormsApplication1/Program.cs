@@ -38,7 +38,7 @@ namespace BeachScouter
 
 
             //Application.Run(new SetupAssistant());
-            InitialForm initialform = new InitialForm();
+            SetupAssistant initialform = new SetupAssistant();
             initialform.StartPosition = FormStartPosition.Manual;
             initialform.DesktopLocation = new Point(0, 0);
             Application.Run(initialform);
