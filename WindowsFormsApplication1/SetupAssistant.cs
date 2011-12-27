@@ -206,13 +206,13 @@ namespace BeachScouter
 
             listBox_cameras.Items.Clear();
 
-            //for (int i = 1; i < 2; i++)
-            //{
-                capture = new Capture(-1);
+            for (int i = 0; i < 2; i++)
+            {
+                capture = new Capture(i);
                 if (capture.QueryFrame() != null)
-                    listBox_cameras.Items.Add("Camera ");
+                    listBox_cameras.Items.Add("Camera "+i);
                 capture.Dispose();
-            //}
+            }
 
             if (listBox_cameras.Items.Count > 0)
                 listBox_cameras.SelectedIndex = 0;
