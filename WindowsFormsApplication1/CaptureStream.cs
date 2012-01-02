@@ -91,7 +91,7 @@ namespace BeachScouter
        
             try
             {
-                String videopath = Program.getConfiguration().Mediafolderpath + @"\" + video_name + ".avi";
+                String videopath = Program.getConfiguration().Mediafolderpath + @"\" + video_name + ".mpg";
                 capture_move = new Capture(videopath);
 
                 double frame_number = 0;

@@ -28,11 +28,11 @@ namespace BeachScouter
         public void write() {
             int codec = Emgu.CV.CvInvoke.CV_FOURCC('P', 'I', 'M', '1');
             VideoWriter videowriter = new VideoWriter(videopath, codec, 25, 640, 480, true);
-
+            
 
             for (int i = 0; i < list_timestamps.Count; i++)
             {
-                videopath = Program.getConfiguration().Mediafolderpath + @"\" + list_timestamps[i].ToString() + ".avi";
+                videopath = Program.getConfiguration().Mediafolderpath + @"\" + list_timestamps[i].ToString() + ".mpg";
                 try
                 {
                     Capture joincapture = new Capture(videopath);
@@ -40,6 +40,7 @@ namespace BeachScouter
                     while (frame != null)
                     {
                         videowriter.WriteFrame(frame);
+                        frame.Dispose();
                         frame = joincapture.QueryFrame();
                     }
                     joincapture.Dispose();

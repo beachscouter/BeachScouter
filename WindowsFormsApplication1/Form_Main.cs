@@ -1023,7 +1023,7 @@ namespace BeachScouter
 
                 
                 String move_identifier = start_time.ToString();
-                String videopath = Program.getConfiguration().Mediafolderpath + @"\" + move_identifier + ".avi";
+                String videopath = Program.getConfiguration().Mediafolderpath + @"\" + move_identifier + ".mpg";
                 videoWriter = new VideoWriter(videopath, codec, fps, 640, 480, true);
 
 
@@ -1588,7 +1588,7 @@ namespace BeachScouter
                 {
 
                     String move_identifier = List_timestamps[i].ToString();
-                    String videopath = Program.getConfiguration().Mediafolderpath + @"\" + move_identifier + ".avi";
+                    String videopath = Program.getConfiguration().Mediafolderpath + @"\" + move_identifier + ".mpg";
                     Capture temp = new Capture(videopath);
                     double framecount = temp.GetCaptureProperty(CAP_PROP.CV_CAP_PROP_FRAME_COUNT);
                     temp.SetCaptureProperty(CAP_PROP.CV_CAP_PROP_POS_FRAMES, framecount);
@@ -1950,7 +1950,7 @@ namespace BeachScouter
                 try
                 {
                     capture_review = null; // delete the old one
-                    String videopath = Program.getConfiguration().Mediafolderpath + @"\" + video_name + ".avi";
+                    String videopath = Program.getConfiguration().Mediafolderpath + @"\" + video_name + ".mpg";
                     this.capture_review = new Capture(videopath);
 
                 }
@@ -2841,7 +2841,7 @@ namespace BeachScouter
 
             if (result == DialogResult.OK)
             {
-                ExportVideoThread exportvideothread = new ExportVideoThread(savefiledialog.FileName + ".avi", list_timestamps);
+                ExportVideoThread exportvideothread = new ExportVideoThread(savefiledialog.FileName + ".mpg", list_timestamps);
                 System.Threading.Thread t = new System.Threading.Thread(exportvideothread.write);
                 t.SetApartmentState(System.Threading.ApartmentState.STA);
                 t.Start();
