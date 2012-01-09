@@ -64,26 +64,29 @@ namespace BeachScouter
 
         public void write()
         {
-
-            if (list_timestamps.Count > 1)
-            {
-                    string firstVideoFilePath = Program.getConfiguration().Mediafolderpath + @"\" + list_timestamps[0].ToString() + ".mpg";
-                    string secondVideoFilePath = Program.getConfiguration().Mediafolderpath + @"\" + list_timestamps[1].ToString() + ".mpg";
-
-                    using (ITimeline timeline = new DefaultTimeline())
-                    {
-                        IGroup group = timeline.AddVideoGroup(32, 720, 576);
-
-                        var firstVideoClip = group.AddTrack().AddVideo(firstVideoFilePath);
-                        var secondVideoClip = group.AddTrack().AddVideo(secondVideoFilePath, firstVideoClip.Duration);
-
-                        using (AviFileRenderer renderer = new AviFileRenderer(timeline, videopath))
+                        using (ITimeline timeline = new DefaultTimeline())
                         {
-                            renderer.Render();
+                            IGroup group = timeline.AddVideoGroup(32, 640, 480);
+
+                                       
+                            string firstVideoFilePath = Program.getConfiguration().Mediafolderpath + @"\" + list_timestamps[0].ToString() + ".mpg";
+                            var firstVideoClip = group.AddTrack().AddVideo(firstVideoFilePath);
+
+
+                            for (int i = 1; i < list_timestamps.Count; i++)
+                            {
+                                string secondVideoFilePath = Program.getConfiguration().Mediafolderpath + @"\" + list_timestamps[i].ToString() + ".mpg";
+                                var secondVideoClip = group.AddTrack().AddVideo(secondVideoFilePath, firstVideoClip.Duration);
+                                firstVideoClip = secondVideoClip;
+                            }
+
+                            using (AviFileRenderer renderer = new AviFileRenderer(timeline, videopath))
+                            {
+                                renderer.Render();
+                            }
+
                         }
-                    }
-                
-            }
+            
         }
 
 

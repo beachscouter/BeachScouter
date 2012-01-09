@@ -395,15 +395,17 @@ namespace BeachScouter
                     {
                         if (nextFrame != null)
                         {
-                            
-                            if (new_move)
-                                Emgu.CV.CvInvoke.cvWriteFrame(videoWriter, nextFrame);
-                            
-                            pictureBox_livevideo.Image = nextFrame.ToBitmap();
 
+                            if (new_move)
+                                videoWriter.WriteFrame(nextFrame);
+
+                            pictureBox_livevideo.Image = nextFrame.ToBitmap(pictureBox_livevideo.Width, pictureBox_livevideo.Height);
+                            nextFrame = null;
                         }
                     }
-                    catch (ArgumentException) { Console.WriteLine("EXCEPTION: ArgumentException"); }
+                    catch (ArgumentException) { 
+                        Console.WriteLine("EXCEPTION: ArgumentException in processframe");
+                    }
                 }
                 catch (AccessViolationException) { Console.WriteLine("EXCEPTION: AccessViolationException"); }
             }
@@ -2846,15 +2848,27 @@ namespace BeachScouter
             if (result == DialogResult.OK)
             {
 
-                
-                        
                         string videopath = savefiledialog.FileName + ".mpg";
 
+                        /*
                         using (ITimeline timeline = new DefaultTimeline())
                         {
                             IGroup group = timeline.AddVideoGroup(32, 640, 480);
 
                             string firstVideoFilePath = Program.getConfiguration().Mediafolderpath + @"\" + list_timestamps[0].ToString() + ".mpg";
+                            
+                            
+                            // in case we only have one rally
+                            if (list_timestamps.Count == 1)
+                            {
+                                var firstVideoClip = group.AddTrack().AddVideo(firstVideoFilePath);
+                                using (AviFileRenderer renderer = new AviFileRenderer(timeline, videopath))
+                                {
+                                    renderer.Render();
+                                }
+                            }
+
+
                             for (int i = 1; i < list_timestamps.Count; i++)
                             {
                                 string secondVideoFilePath = Program.getConfiguration().Mediafolderpath + @"\" + list_timestamps[i].ToString() + ".mpg";
@@ -2870,23 +2884,23 @@ namespace BeachScouter
                                 firstVideoFilePath = videopath;
                             }
                         }
+                    */
                 
+                    
+
                 
-        
+                    ExportVideoThread exportvideothread = new ExportVideoThread(savefiledialog.FileName + ".mpg", list_timestamps);
+                    System.Threading.Thread t = new System.Threading.Thread(exportvideothread.write);
+                    t.SetApartmentState(System.Threading.ApartmentState.STA);
+                    t.Start();
+                
 
-                /*
-                ExportVideoThread exportvideothread = new ExportVideoThread(savefiledialog.FileName + ".mpg", list_timestamps);
-                System.Threading.Thread t = new System.Threading.Thread(exportvideothread.write);
-                t.SetApartmentState(System.Threading.ApartmentState.STA);
-                t.Start();
-                */
-
-                // write export xml
-                setRalliesAbsoluteStartTimes();
-                ExportXML exportxml = new ExportXML(savefiledialog.FileName, Game);
-                for (int i = 0; i < Game.Sets.Count; i++)
-                    for (int r = 0; r < Game.Sets[i].Rallies.Count; r++)
-                        exportxml.addRally(Game.Sets[i].Rallies[r]);
+                    // write export xml
+                    setRalliesAbsoluteStartTimes();
+                    ExportXML exportxml = new ExportXML(savefiledialog.FileName, Game);
+                    for (int i = 0; i < Game.Sets.Count; i++)
+                        for (int r = 0; r < Game.Sets[i].Rallies.Count; r++)
+                            exportxml.addRally(Game.Sets[i].Rallies[r]);
                      
             }
         }
