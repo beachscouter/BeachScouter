@@ -59,7 +59,7 @@ namespace BeachScouter
                 xmlDoc = new XmlOutput();
 
                 // Camera stuff
-                //listCaptureDevices();
+                listCaptureDevices();
             }
             
         }

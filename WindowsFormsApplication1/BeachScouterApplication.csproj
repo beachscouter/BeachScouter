@@ -49,17 +49,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DirectShowLib-2005">
+      <HintPath>bin\Debug\SplicerLibs\DirectShowLib-2005.dll</HintPath>
+    </Reference>
     <Reference Include="Emgu.CV, Version=2.2.1.1150, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\Emgu\emgucv-windows-x86 2.3.0.1416\bin\Emgu.CV.dll</HintPath>
-    </Reference>
-    <Reference Include="Emgu.CV.DebuggerVisualizers.VS2008, Version=2.2.1.1150, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Emgu\emgucv-windows-x86 2.3.0.1416\bin\Emgu.CV.DebuggerVisualizers.VS2008.dll</HintPath>
-    </Reference>
-    <Reference Include="Emgu.CV.DebuggerVisualizers.VS2010, Version=2.2.1.1150, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Emgu\emgucv-windows-x86 2.3.0.1416\bin\Emgu.CV.DebuggerVisualizers.VS2010.dll</HintPath>
     </Reference>
     <Reference Include="Emgu.CV.GPU, Version=2.2.1.1150, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -79,6 +74,12 @@
     <Reference Include="Emgu.Util, Version=2.2.1.1150, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\Emgu\emgucv-windows-x86 2.3.0.1416\bin\Emgu.Util.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>bin\Debug\SplicerLibs\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Splicer">
+      <HintPath>bin\Debug\SplicerLibs\Splicer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

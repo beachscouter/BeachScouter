@@ -18,6 +18,9 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 
+using Splicer;
+using Splicer.Timeline;
+using Splicer.Renderer;
 
 namespace BeachScouter
 {
@@ -1114,6 +1117,7 @@ namespace BeachScouter
                 {
                     start_time = Game.Current_rally.Start_time;
                     createScreeshot(start_time);
+                    videoWriter.Dispose();
                     //backgroundWorker_capture_new_move.CancelAsync();
                 }
                 else
@@ -2841,10 +2845,41 @@ namespace BeachScouter
 
             if (result == DialogResult.OK)
             {
+
+                
+                        
+                        string videopath = savefiledialog.FileName + ".mpg";
+
+                        using (ITimeline timeline = new DefaultTimeline())
+                        {
+                            IGroup group = timeline.AddVideoGroup(32, 640, 480);
+
+                            string firstVideoFilePath = Program.getConfiguration().Mediafolderpath + @"\" + list_timestamps[0].ToString() + ".mpg";
+                            for (int i = 1; i < list_timestamps.Count; i++)
+                            {
+                                string secondVideoFilePath = Program.getConfiguration().Mediafolderpath + @"\" + list_timestamps[i].ToString() + ".mpg";
+
+                                var firstVideoClip = group.AddTrack().AddVideo(firstVideoFilePath);
+                                var secondVideoClip = group.AddTrack().AddVideo(secondVideoFilePath, firstVideoClip.Duration);
+
+                                using (AviFileRenderer renderer = new AviFileRenderer(timeline, videopath))
+                                {
+                                    renderer.Render();
+                                }
+
+                                firstVideoFilePath = videopath;
+                            }
+                        }
+                
+                
+        
+
+                /*
                 ExportVideoThread exportvideothread = new ExportVideoThread(savefiledialog.FileName + ".mpg", list_timestamps);
                 System.Threading.Thread t = new System.Threading.Thread(exportvideothread.write);
                 t.SetApartmentState(System.Threading.ApartmentState.STA);
                 t.Start();
+                */
 
                 // write export xml
                 setRalliesAbsoluteStartTimes();

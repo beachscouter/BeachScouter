@@ -760,19 +760,17 @@
             this.label_videopath.AutoSize = true;
             this.label_videopath.Location = new System.Drawing.Point(80, 467);
             this.label_videopath.Name = "label_videopath";
-            this.label_videopath.Size = new System.Drawing.Size(220, 13);
+            this.label_videopath.Size = new System.Drawing.Size(16, 13);
             this.label_videopath.TabIndex = 79;
-            this.label_videopath.Text = "C:\\Users\\lucas\\Desktop\\Toronto Game.mp4";
+            this.label_videopath.Text = "...";
             // 
             // radioButton_videofile
             // 
             this.radioButton_videofile.AutoSize = true;
-            this.radioButton_videofile.Checked = true;
             this.radioButton_videofile.Location = new System.Drawing.Point(3, 465);
             this.radioButton_videofile.Name = "radioButton_videofile";
             this.radioButton_videofile.Size = new System.Drawing.Size(71, 17);
             this.radioButton_videofile.TabIndex = 77;
-            this.radioButton_videofile.TabStop = true;
             this.radioButton_videofile.Text = "Video File";
             this.radioButton_videofile.UseVisualStyleBackColor = true;
             // 
@@ -794,10 +792,12 @@
             // radioButton_camera
             // 
             this.radioButton_camera.AutoSize = true;
+            this.radioButton_camera.Checked = true;
             this.radioButton_camera.Location = new System.Drawing.Point(6, 38);
             this.radioButton_camera.Name = "radioButton_camera";
             this.radioButton_camera.Size = new System.Drawing.Size(61, 17);
             this.radioButton_camera.TabIndex = 73;
+            this.radioButton_camera.TabStop = true;
             this.radioButton_camera.Text = "Camera";
             this.radioButton_camera.UseVisualStyleBackColor = true;
             this.radioButton_camera.CheckedChanged += new System.EventHandler(this.radioButton_camera_CheckedChanged);
