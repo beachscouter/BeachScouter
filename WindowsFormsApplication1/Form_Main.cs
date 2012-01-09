@@ -2848,6 +2848,7 @@ namespace BeachScouter
             if (result == DialogResult.OK)
             {
 
+                /*
                         string videopath = savefiledialog.FileName + ".mpg";
 
                         using (ITimeline timeline = new DefaultTimeline())
@@ -2870,19 +2871,18 @@ namespace BeachScouter
                             using (AviFileRenderer renderer = new AviFileRenderer(timeline, videopath))
                             {
                                 renderer.Render();
-                                Console.Write("");
                             }
 
                         }
                 
-                    
+                    */
 
-                    /*
+                    
                     ExportVideoThread exportvideothread = new ExportVideoThread(savefiledialog.FileName + ".mpg", list_timestamps);
                     System.Threading.Thread t = new System.Threading.Thread(exportvideothread.write);
                     t.SetApartmentState(System.Threading.ApartmentState.STA);
                     t.Start();
-                    */
+                    
 
                     // write export xml
                     setRalliesAbsoluteStartTimes();
