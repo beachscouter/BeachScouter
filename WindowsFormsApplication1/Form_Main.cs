@@ -20,7 +20,7 @@ using System.IO;
 
 using Splicer;
 using Splicer.Timeline;
-using Splicer.Renderer;
+using Splicer.Renderer;using System.Threading;
 
 namespace BeachScouter
 {
@@ -1029,7 +1029,8 @@ namespace BeachScouter
                 
                 String move_identifier = start_time.ToString();
                 String videopath = Program.getConfiguration().Mediafolderpath + @"\" + move_identifier + ".mpg";
-                videoWriter = new VideoWriter(videopath, codec, fps, 640, 480, true);
+                
+                videoWriter = new VideoWriter(videopath, codec, 30, 640, 480, true);
 
 
 
@@ -1125,13 +1126,12 @@ namespace BeachScouter
                 else
                 {
                     endmilisecond = axWindowsMediaPlayer_live.Ctlcontrols.currentPosition;
-                    WriteVideoThread writevideothread = new WriteVideoThread(startmilisecond, endmilisecond, videoWriter, loaded_videopath);
-                    writeRallyVideo(writevideothread);
+                    
+                    //WriteVideoThread writevideoobject = new WriteVideoThread(startmilisecond, endmilisecond, videoWriter, loaded_videopath);
+                    //writeRallyVideo(writevideoobject);
+                    writeRallyVideoFromLoaded(startmilisecond, endmilisecond, videoWriter, loaded_videopath);
                     start_time = Game.Current_rally.Start_time;
-                    if (writevideothread.screenshot != null)
-                        setScreeshot(writevideothread.screenshot);
-                    else
-                        createScreeshot(start_time);
+                    createScreeshot(start_time);
                 }
 
 
@@ -1361,6 +1361,43 @@ namespace BeachScouter
                     }
         }
 
+
+        private void writeRallyVideoFromLoaded(double s, double e, VideoWriter writer, String loadedvideopath)
+        {
+            double start = Math.Floor(s);
+            double end = Math.Ceiling(e);
+            double startmsec = start * 1000;
+            double endmsec = end * 1000;
+
+
+            Capture tempcapture = new Capture(loaded_videopath);
+
+            Image<Bgr, Byte> frame;
+            if (tempcapture != null)
+            {
+                //tempcapture.SetCaptureProperty(CAP_PROP.CV_CAP_PROP_POS_MSEC, start);
+
+                double fps2 = tempcapture.GetCaptureProperty(CAP_PROP.CV_CAP_PROP_FPS);
+                //tempcapture.SetCaptureProperty(CAP_PROP.CV_CAP_PROP_POS_MSEC, 100);
+
+                for (int i = 0; i < (start * fps2); i++)
+                    (tempcapture).QueryFrame();
+
+                int durationframes = (int)((end - start) * fps2); // since c# sucks i have to do it manually just like any other crap
+
+                int count = 0;
+                while (count < durationframes)
+                {
+                    frame = (tempcapture).QueryFrame();
+                    videoWriter.WriteFrame(frame);
+                    count++;
+                }
+            }
+
+
+            tempcapture.Dispose();
+            videoWriter.Dispose();
+        }
 
 
         /*
@@ -1722,7 +1759,7 @@ namespace BeachScouter
             if (checkBox_review_slow_motion.Checked)
                 timer_review_capture.Interval = 160;
             else
-                timer_review_capture.Interval = 40;
+                timer_review_capture.Interval = 30;
         }
 
 
@@ -2848,8 +2885,17 @@ namespace BeachScouter
             if (result == DialogResult.OK)
             {
 
-                /*
                         string videopath = savefiledialog.FileName + ".mpg";
+
+                        // write export xml
+                        setRalliesAbsoluteStartTimes();
+                        ExportXML exportxml = new ExportXML(savefiledialog.FileName, Game);
+                        for (int i = 0; i < Game.Sets.Count; i++)
+                            for (int r = 0; r < Game.Sets[i].Rallies.Count; r++)
+                                exportxml.addRally(Game.Sets[i].Rallies[r]);
+
+
+
 
                         using (ITimeline timeline = new DefaultTimeline())
                         {
@@ -2867,29 +2913,25 @@ namespace BeachScouter
                                 firstVideoClip = secondVideoClip;
                             }
 
-                            
+
                             using (AviFileRenderer renderer = new AviFileRenderer(timeline, videopath))
                             {
                                 renderer.Render();
+                                progressBar_status.Value++;
                             }
 
                         }
                 
-                    */
-
                     
+
+                    /*
                     ExportVideoThread exportvideothread = new ExportVideoThread(savefiledialog.FileName + ".mpg", list_timestamps);
                     System.Threading.Thread t = new System.Threading.Thread(exportvideothread.write);
                     t.SetApartmentState(System.Threading.ApartmentState.STA);
                     t.Start();
-                    
+                    */
 
-                    // write export xml
-                    setRalliesAbsoluteStartTimes();
-                    ExportXML exportxml = new ExportXML(savefiledialog.FileName, Game);
-                    for (int i = 0; i < Game.Sets.Count; i++)
-                        for (int r = 0; r < Game.Sets[i].Rallies.Count; r++)
-                            exportxml.addRally(Game.Sets[i].Rallies[r]);
+                    
                      
             }
         }

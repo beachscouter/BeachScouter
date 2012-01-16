@@ -1297,8 +1297,6 @@ namespace BeachScouter
             // 
             this.checkBox_review_slow_motion.Appearance = System.Windows.Forms.Appearance.Button;
             this.checkBox_review_slow_motion.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.checkBox_review_slow_motion.Checked = true;
-            this.checkBox_review_slow_motion.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox_review_slow_motion.Location = new System.Drawing.Point(1016, -1);
             this.checkBox_review_slow_motion.Name = "checkBox_review_slow_motion";
             this.checkBox_review_slow_motion.Size = new System.Drawing.Size(147, 52);
@@ -1548,7 +1546,7 @@ namespace BeachScouter
             // 
             // timer_review_capture
             // 
-            this.timer_review_capture.Interval = 160;
+            this.timer_review_capture.Interval = 30;
             this.timer_review_capture.Tick += new System.EventHandler(this.timer_review_capture_Tick);
             // 
             // menuStrip1

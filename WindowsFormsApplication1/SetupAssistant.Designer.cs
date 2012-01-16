@@ -131,7 +131,7 @@
             // 
             this.tabControl_setup.Controls.Add(this.tabPage_gamesettings);
             this.tabControl_setup.Controls.Add(this.tabPage_Video);
-            this.tabControl_setup.Location = new System.Drawing.Point(-1, -21);
+            this.tabControl_setup.Location = new System.Drawing.Point(-1, -14);
             this.tabControl_setup.Multiline = true;
             this.tabControl_setup.Name = "tabControl_setup";
             this.tabControl_setup.SelectedIndex = 0;
@@ -767,10 +767,12 @@
             // radioButton_videofile
             // 
             this.radioButton_videofile.AutoSize = true;
+            this.radioButton_videofile.Checked = true;
             this.radioButton_videofile.Location = new System.Drawing.Point(3, 465);
             this.radioButton_videofile.Name = "radioButton_videofile";
             this.radioButton_videofile.Size = new System.Drawing.Size(71, 17);
             this.radioButton_videofile.TabIndex = 77;
+            this.radioButton_videofile.TabStop = true;
             this.radioButton_videofile.Text = "Video File";
             this.radioButton_videofile.UseVisualStyleBackColor = true;
             // 
@@ -792,12 +794,10 @@
             // radioButton_camera
             // 
             this.radioButton_camera.AutoSize = true;
-            this.radioButton_camera.Checked = true;
             this.radioButton_camera.Location = new System.Drawing.Point(6, 38);
             this.radioButton_camera.Name = "radioButton_camera";
             this.radioButton_camera.Size = new System.Drawing.Size(61, 17);
             this.radioButton_camera.TabIndex = 73;
-            this.radioButton_camera.TabStop = true;
             this.radioButton_camera.Text = "Camera";
             this.radioButton_camera.UseVisualStyleBackColor = true;
             this.radioButton_camera.CheckedChanged += new System.EventHandler(this.radioButton_camera_CheckedChanged);
