@@ -31,18 +31,8 @@ namespace BeachScouter
 
         public WriteVideoThread(double start, double end, VideoWriter writer, String loadedvideopath)
         {
-            Console.WriteLine("WindowsMediaSucks: " + start + " - " + end);
             this.start = Math.Floor(start);
-            this.end = Math.Ceiling(end) ;
-            Console.WriteLine("Increased: " + this.start + " - " + this.end);
-            //this.durationframes = (this.end - this.start) * 25;
-
-            this.startmsec = this.start * 1000;
-            this.endmsec = this.end * 1000;
-            Console.WriteLine("StartMsec: " + startmsec);
-            Console.WriteLine("Duration: " + (this.end - this.start));
-            Console.WriteLine("Duration frames: " + ((this.end - this.start) * 30));
-
+            this.end = Math.Ceiling(end);
             this.videoWriter = writer;
             this.loaded_videopath = loadedvideopath;
         }
@@ -51,29 +41,26 @@ namespace BeachScouter
         {
             Capture tempcapture = new Capture(loaded_videopath);
 
-            // Because this all sucks and we dont get anyfeedback on wether/when emgucv/csharp has loaded the video
-            // we have to manually "wait" (not sleep, because sleep stops everything including opening the video)
-            // by reading a couple of frames first. ITS BECAUSE OF CODE LIKE THIS AND BECAUSE OF NO PROPER FRAMESWORKS THAT WINDOWS SUCK!!11!!
-            for (int i=0; i<100; i++)
-                (tempcapture).QueryFrame();
-
             Image<Bgr, Byte> frame;
             if (tempcapture != null)
             {
-                //tempcapture.SetCaptureProperty(CAP_PROP.CV_CAP_PROP_POS_MSEC, start);
-                
-                double fps = tempcapture.GetCaptureProperty(CAP_PROP.CV_CAP_PROP_FPS);
-                tempcapture.SetCaptureProperty(CAP_PROP.CV_CAP_PROP_POS_FRAMES, ((this.start) * fps));
-                int durationframes = (int)((this.end - this.start) * fps); // since c# sucks i have to do it manually just like any other crap
-                //for (int framecount = 0; framecount <= durationframes; framecount++)
-                while(tempcapture.GetCaptureProperty(CAP_PROP.CV_CAP_PROP_POS_MSEC)< endmsec)
+
+                double fps2 = tempcapture.GetCaptureProperty(CAP_PROP.CV_CAP_PROP_FPS);
+
+                for (int i = 0; i < (start * fps2); i++)
+                    (tempcapture).QueryFrame();
+
+                int durationframes = (int)((end - start) * fps2);
+
+                int count = 0;
+                while (count < durationframes)
                 {
                     frame = (tempcapture).QueryFrame();
                     videoWriter.WriteFrame(frame);
-                    CvInvoke.cvWaitKey(100);
+                    count++;
                 }
             }
-            
+
 
             tempcapture.Dispose();
             videoWriter.Dispose();

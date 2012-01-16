@@ -1121,15 +1121,14 @@ namespace BeachScouter
                     start_time = Game.Current_rally.Start_time;
                     createScreeshot(start_time);
                     videoWriter.Dispose();
-                    //backgroundWorker_capture_new_move.CancelAsync();
                 }
                 else
                 {
                     endmilisecond = axWindowsMediaPlayer_live.Ctlcontrols.currentPosition;
                     
-                    //WriteVideoThread writevideoobject = new WriteVideoThread(startmilisecond, endmilisecond, videoWriter, loaded_videopath);
-                    //writeRallyVideo(writevideoobject);
-                    writeRallyVideoFromLoaded(startmilisecond, endmilisecond, videoWriter, loaded_videopath);
+                    WriteVideoThread writevideoobject = new WriteVideoThread(startmilisecond, endmilisecond, videoWriter, loaded_videopath);
+                    writeRallyVideo(writevideoobject);
+                    //writeRallyVideoFromLoaded(startmilisecond, endmilisecond, videoWriter, loaded_videopath);
                     start_time = Game.Current_rally.Start_time;
                     createScreeshot(start_time);
                 }
@@ -2912,7 +2911,6 @@ namespace BeachScouter
                                 var secondVideoClip = group.AddTrack().AddVideo(secondVideoFilePath, firstVideoClip.Duration);
                                 firstVideoClip = secondVideoClip;
                             }
-
 
                             using (AviFileRenderer renderer = new AviFileRenderer(timeline, videopath))
                             {
