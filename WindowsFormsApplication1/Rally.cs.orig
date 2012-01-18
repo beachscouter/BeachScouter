@@ -1,0 +1,229 @@
+﻿/* This class represents a Rally (a.k.a Spielzug, Move, etc etc etc etc)
+ * It contains Information abouth wether the rally was a:
+ *  - KILL 
+ *  - DROP 
+ *  - SMASH or BIGPOINT
+ * 
+ * It also contains various informations about:
+ *  - Wich team was UP and which team was DOWN at the time
+ *  - Positions of serve, receive, pass, jump and defense
+ *  - The time the rally started and ended
+ *  
+ */
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace BeachScouter
+{
+    class Rally
+    {
+        public enum PlayerPosition { upperLeft = 1, upperRight, lowerLeft, lowerRight };
+        public enum TeamSide { upper = 1, lower };
+<<<<<<< HEAD
+=======
+        public enum RallyProperty { kill = 1, bigpoint, smash, drop };
+>>>>>>> origin/beachscouter_mit_config
+
+        private PlayerPosition teamAPlayer1_pos;
+        private PlayerPosition teamAPlayer2_pos;
+        private PlayerPosition teamBPlayer1_pos;
+        private PlayerPosition teamBPlayer2_pos;
+
+        private TeamSide teamASide;
+        private TeamSide teamBSide;
+
+        private Position serve_pos;
+        private Position receive_pos;
+        private Position pass_pos;
+        private Position jump_pos;
+        private Position defence_pos;
+
+        private DateTime startRally_time;
+        private DateTime endRally_time;
+
+
+        // vileicht kann man die auch als enum definieren:
+        private bool finalized;
+        private bool bigPoint;
+        private bool kill;
+        private bool smash;
+        private bool drop;
+        private bool defaultRallyDevelopment;
+
+        // constructor
+        // shall be called upon the rally starts
+
+<<<<<<< HEAD
+
+=======
+        public Rally()
+        {
+            //initialize all so we dont get null exceptions in case the scouter misses a click
+            serve_pos = new Position();
+            receive_pos = new Position();
+            pass_pos = new Position();
+            jump_pos = new Position();
+            defence_pos = new Position();
+
+        }
+
+
+        /*
+>>>>>>> origin/beachscouter_mit_config
+        // This constructor is called in case we start the rally uppon button click "Start Move". That is, we wont have a serve position yet
+        public Rally(PlayerPosition tAp1, PlayerPosition tAp2, PlayerPosition tBp1, PlayerPosition tBp2, TeamSide tA, TeamSide tB)
+        {   
+
+            this.teamAPlayer1_pos = tAp1;
+            this.teamAPlayer2_pos = tAp2;
+            this.teamBPlayer1_pos = tBp1;
+            this.teamBPlayer2_pos = tBp2;
+
+            this.teamASide = tA;
+            this.teamBSide = tB;
+
+
+            this.startRally_time = DateTime.Now;
+        }
+
+        */
+
+
+        // ---------------------------------------------------------------------
+        // getter and setter
+        // ---------------------------------------------------------------------
+
+<<<<<<< HEAD
+        public PlayerPosition TeamAPlayer1
+=======
+        public PlayerPosition TeamAPlayer1_pos
+>>>>>>> origin/beachscouter_mit_config
+        {
+            get { return teamAPlayer1_pos; }
+            set { teamAPlayer2_pos = value; }
+        }
+
+<<<<<<< HEAD
+        public PlayerPosition TeamAPlayer2
+=======
+        public PlayerPosition TeamAPlayer2_pos
+>>>>>>> origin/beachscouter_mit_config
+        {
+            get { return teamAPlayer2_pos; }
+            set { teamAPlayer2_pos = value; }
+        }
+
+<<<<<<< HEAD
+        public PlayerPosition TeamBPlayer1
+=======
+        public PlayerPosition TeamBPlayer1_pos
+>>>>>>> origin/beachscouter_mit_config
+        {
+            get { return teamBPlayer1_pos; }
+            set { teamBPlayer1_pos = value; }
+        }
+
+<<<<<<< HEAD
+        public PlayerPosition TeamBPlayer2
+=======
+        public PlayerPosition TeamBPlayer2_pos
+>>>>>>> origin/beachscouter_mit_config
+        {
+            get { return teamBPlayer2_pos; }
+            set { teamBPlayer2_pos = value; }
+        }
+
+        public TeamSide TeamASide
+        {
+            get { return teamASide; }
+            set { teamASide = value; }
+        }
+
+        public TeamSide TeamBSide
+        {
+            get { return teamBSide; }
+            set { teamBSide = value; }
+        }
+
+        public Position Serve_pos
+        {
+            get { return serve_pos; }
+            set { serve_pos = value; }
+        }
+
+        public Position Receive_pos
+        {
+            get { return receive_pos; }
+            set { receive_pos = value; }
+        }
+
+        public Position Pass_pos
+        {
+            get { return pass_pos; }
+            set { pass_pos = value; }
+        }
+
+        public Position Jump_pos
+        {
+            get { return jump_pos; }
+            set { jump_pos = value; }
+        }
+
+        public Position Defence_pos
+        {
+            get { return defence_pos; }
+            set { defence_pos = value; }
+        }
+
+        public DateTime StartRally_time
+        {
+            get { return startRally_time; }
+            set { startRally_time = value; }
+        }
+
+        public DateTime EndRally_time
+        {
+            get { return endRally_time; }
+            set { endRally_time = value; }
+        }
+
+        public bool Finalized
+        {
+            get { return finalized; }
+            set { finalized = value; }
+        }
+
+        public bool BigPoint
+        {
+            get { return bigPoint; }
+            set { bigPoint = value; }
+        }
+        
+        public bool Kill
+        {
+            get { return kill; }
+            set { kill = value; }
+        }
+        
+        public bool Smash
+        {
+            get { return smash; }
+            set { smash = value; }
+        }
+        
+        public bool Drop
+        {
+            get { return drop; }
+            set { drop = value; }
+        }
+
+        public bool DefaultRallyDevelopment
+        {
+            get { return defaultRallyDevelopment; }
+            set { defaultRallyDevelopment = value; }
+        }
+    }
+}
+
