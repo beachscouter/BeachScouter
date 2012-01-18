@@ -1134,7 +1134,6 @@ namespace BeachScouter
                     endmilisecond = axWindowsMediaPlayer_live.Ctlcontrols.currentPosition;
                     WriteVideoThread writevideoobject = new WriteVideoThread(startmilisecond, endmilisecond, loaded_videopath, videoWriter);
                     writeRallyVideo(writevideoobject);
-                    //writeRallyVideoFromLoaded(startmilisecond, endmilisecond, videoWriter, loaded_videopath);
                     start_time = Game.Current_rally.Start_time;
                     createScreeshot(start_time);
                 }
