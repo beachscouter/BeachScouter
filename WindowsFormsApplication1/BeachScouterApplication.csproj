@@ -117,6 +117,7 @@
     <Compile Include="BrowseDialogState.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="DoneWritingRallyVideoEventArgs.cs" />
+    <Compile Include="ExportVideoProgressEventArgs.cs" />
     <Compile Include="ExportVideoThread.cs" />
     <Compile Include="ExportXML.cs" />
     <Compile Include="Form_Main.cs">
@@ -157,7 +158,6 @@
     <Compile Include="Team.cs" />
     <Compile Include="Timeout.cs" />
     <Compile Include="WriteRallyVideoThread.cs" />
-    <Compile Include="WriteVideoThread.cs" />
     <Compile Include="XmlOutput.cs" />
     <EmbeddedResource Include="About.resx">
       <DependentUpon>About.cs</DependentUpon>

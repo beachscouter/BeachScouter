@@ -1052,7 +1052,7 @@ namespace BeachScouter
                 {
                     endmilisecond = axWindowsMediaPlayer_live.Ctlcontrols.currentPosition;
                     start_time = Game.Current_rally.Start_time;
-                    WriteVideoThread writevideoobject = new WriteVideoThread(startmilisecond, endmilisecond, loaded_videopath, videoWriter, start_time);
+                    WriteRallyVideoThread writevideoobject = new WriteRallyVideoThread(startmilisecond, endmilisecond, loaded_videopath, videoWriter, start_time);
                     writevideoobject.donewritingrallyvideo += new DoneWritingRallyVideoEventHandler(writevideothread_donewriting);
                     writeRallyVideo(writevideoobject);
                     
@@ -1075,7 +1075,7 @@ namespace BeachScouter
         }
 
 
-
+        
 
 
         private void createScreeshot(long start_time)
@@ -1114,6 +1114,15 @@ namespace BeachScouter
             }
 
         }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1379,7 +1388,7 @@ namespace BeachScouter
         /*
          * This method writes the video part form start-end in video file out of the loaded game video
          */
-        private void writeRallyVideo(WriteVideoThread writevideothread)
+        private void writeRallyVideo(WriteRallyVideoThread writevideothread)
         { 
             System.Threading.Thread thread = new System.Threading.Thread(new System.Threading.ThreadStart(writevideothread.write));
             thread.SetApartmentState(System.Threading.ApartmentState.STA);
@@ -2912,6 +2921,7 @@ namespace BeachScouter
 
                     
                     ExportVideoThread exportvideothread = new ExportVideoThread(savefiledialog.FileName + ".mpg", list_timestamps);
+                    exportvideothread.DoneAppendingRallyVideoEvent += new ExportVideoEventHandler(this.updateProgressbarEventFired);
                     System.Threading.Thread t = new System.Threading.Thread(exportvideothread.write);
                     t.SetApartmentState(System.Threading.ApartmentState.STA);
                     t.Start();
@@ -2921,6 +2931,36 @@ namespace BeachScouter
                      
             }
         }
+
+
+
+        // This gets called when the export video thread was done appending a rally video
+        private delegate void UpdateProgressbarEventHandler(int value);
+        private void updateProgressbarEventFired(object sender, ExportVideoProgressEventArgs e)
+        {
+            updateProgressbar(e.State());
+        }
+
+
+        private void updateProgressbar(int value)
+        {
+            if (this.progressBar_status.InvokeRequired)
+            {
+                this.progressBar_status.Invoke(new UpdateProgressbarEventHandler(this.updateProgressbar), value);
+            }
+            else
+            {
+                progressBar_status.Visible = true;
+                progressBar_status.Maximum = list_timestamps.Count;
+                progressBar_status.Value = value+1;
+                if (progressBar_status.Value == progressBar_status.Maximum)
+                    progressBar_status.Visible = false;
+            }
+        }
+
+
+
+
 
         private DialogResult STAShowSaveDialog(FileDialog dialog)
         {
