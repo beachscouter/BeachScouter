@@ -49,8 +49,6 @@ namespace BeachScouter
                 tempcapture.Dispose();
             }
 
-            Console.WriteLine("" + fps);
-
             VideoWriter videowriter = new VideoWriter(videopath, codec, fps, 640, 480, true);
             
 

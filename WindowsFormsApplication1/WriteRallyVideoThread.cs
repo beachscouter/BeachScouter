@@ -1,7 +1,9 @@
 ﻿/*
  * THREAD FOTR WRITING/CUTTINGOUT SINGLE RALLY VIDEOS FROM A LOADED VIDEO
  * 
+ * OR
  * 
+ * FROM A GIVEN BUFFER OF FRAMES
  * 
  */
 
@@ -39,8 +41,9 @@ namespace BeachScouter
         private long starttime;
         private VideoWriter videoWriter;
         private String loaded_videopath;
+        List<Image<Bgr, Byte>> buffer;
 
-
+        // For cutting froma loaded video
         public WriteRallyVideoThread(double start, double end, String loadedvideopath, VideoWriter writer, long starttime)
         {
             this.start = Math.Floor(start);
@@ -49,6 +52,16 @@ namespace BeachScouter
             this.videoWriter = writer;
 
             this.starttime = starttime; // to notify the main frame that we are done writing the rally with id starttime  so we can create a screenshot.
+        }
+
+
+
+        // for writing from a given buffer
+        public WriteRallyVideoThread(List<Image<Bgr, Byte>> buffer, VideoWriter writer, long starttime)
+        {
+            this.videoWriter = writer;
+            this.buffer = buffer;
+            this.starttime = starttime;
         }
 
         public void write()
@@ -88,6 +101,22 @@ namespace BeachScouter
 
             
         }
+
+
+
+        public void writeFromBuffer()
+        {
+            for (int i = 0; i < buffer.Count; i++)
+                videoWriter.WriteFrame(buffer[i]);
+            buffer.Clear();
+            videoWriter.Dispose();
+
+            // We are theoretically done with writing the video... so we notify all registered listeners
+            DoneWritingRallyVideoEventArgs e = new DoneWritingRallyVideoEventArgs(this.starttime);
+            donewritingrallyvideo(this, e);
+
+        }
+
 
     }
 }

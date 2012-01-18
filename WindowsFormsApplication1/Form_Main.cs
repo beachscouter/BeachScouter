@@ -1041,12 +1041,17 @@ namespace BeachScouter
                 // stop the capturing and write video
                 if (capture_device_index != -1) // camera capture
                 {
-                    start_time = Game.Current_rally.Start_time;
-                    createScreeshot(start_time);
+                    /*
                     for (int i = 0; i < buffer.Count; i++)
                         videoWriter.WriteFrame(buffer[i]);
                     buffer.Clear();
                     videoWriter.Dispose();
+                    createScreeshot(start_time);
+                    */
+                    start_time = Game.Current_rally.Start_time;
+                    WriteRallyVideoThread writevideoobject = new WriteRallyVideoThread(buffer, videoWriter, start_time);
+                    writevideoobject.donewritingrallyvideo += new DoneWritingRallyVideoEventHandler(writevideothread_donewriting);
+                    writeRallyVideoFromBuffer(writevideoobject);
                 }
                 else // loaded video
                 {
@@ -1054,7 +1059,7 @@ namespace BeachScouter
                     start_time = Game.Current_rally.Start_time;
                     WriteRallyVideoThread writevideoobject = new WriteRallyVideoThread(startmilisecond, endmilisecond, loaded_videopath, videoWriter, start_time);
                     writevideoobject.donewritingrallyvideo += new DoneWritingRallyVideoEventHandler(writevideothread_donewriting);
-                    writeRallyVideo(writevideoobject);
+                    writeRallyVideoFromLoaded(writevideoobject);
                     
                 }
 
@@ -1388,13 +1393,20 @@ namespace BeachScouter
         /*
          * This method writes the video part form start-end in video file out of the loaded game video
          */
-        private void writeRallyVideo(WriteRallyVideoThread writevideothread)
+        private void writeRallyVideoFromLoaded(WriteRallyVideoThread writevideothread)
         { 
             System.Threading.Thread thread = new System.Threading.Thread(new System.Threading.ThreadStart(writevideothread.write));
             thread.SetApartmentState(System.Threading.ApartmentState.STA);
             thread.Start();
         }
 
+
+        private void writeRallyVideoFromBuffer(WriteRallyVideoThread writevideothread)
+        {
+            System.Threading.Thread thread = new System.Threading.Thread(new System.Threading.ThreadStart(writevideothread.writeFromBuffer));
+            thread.SetApartmentState(System.Threading.ApartmentState.STA);
+            thread.Start();
+        }
 
         /**************************************************************************************************************************************/
         /********************************************* REVIEWER STUFF *************************************************************************/
