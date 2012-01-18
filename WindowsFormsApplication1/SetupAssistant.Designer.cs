@@ -131,7 +131,7 @@
             // 
             this.tabControl_setup.Controls.Add(this.tabPage_gamesettings);
             this.tabControl_setup.Controls.Add(this.tabPage_Video);
-            this.tabControl_setup.Location = new System.Drawing.Point(-1, -14);
+            this.tabControl_setup.Location = new System.Drawing.Point(-1, -21);
             this.tabControl_setup.Multiline = true;
             this.tabControl_setup.Name = "tabControl_setup";
             this.tabControl_setup.SelectedIndex = 0;

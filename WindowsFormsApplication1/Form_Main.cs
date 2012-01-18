@@ -1980,17 +1980,18 @@ namespace BeachScouter
                     capture_review = null; // delete the old one
                     String videopath = Program.getConfiguration().Mediafolderpath + @"\" + video_name + ".mpg";
                     this.capture_review = new Capture(videopath);
-                    double tempfps = capture_review.GetCaptureProperty(CAP_PROP.CV_CAP_PROP_FPS);
-                    if (tempfps > 0)
+                    double fps = capture_review.GetCaptureProperty(CAP_PROP.CV_CAP_PROP_FPS);
+                    if (fps > 0)
                     {
-                        int interval =(int) Math.Ceiling((1000 / tempfps))-3;
+                        int interval = (int)Math.Ceiling((1000 / fps)) - 3;
                         timer_review_capture.Interval = interval;
                         Console.WriteLine("" + interval);
                     }
                     else
+                    {
+                        fps = 25;
                         timer_review_capture.Interval = 40;
-
-                    Console.WriteLine("" + tempfps);
+                    }
                 }
                 catch (NullReferenceException) { Console.WriteLine("unreadable video file"); }
                 
@@ -2206,8 +2207,8 @@ namespace BeachScouter
                 this.capture_review.SetCaptureProperty(CAP_PROP.CV_CAP_PROP_POS_MSEC, (double)position_time);
                 
                 // Set the trackbar value to that Frame
-                trackBar_reviewervideo.Value = (int) (position_time / 1000) * fps;
-
+                trackBar_reviewervideo.Value = (int) (((position_time / 1000) * fps) % trackBar_reviewervideo.Maximum);
+                
                 for (int i = 1; i < fps; i++)
                 {
                     Image<Bgr, Byte> nextFrame = this.capture_review.QueryFrame();
