@@ -1041,13 +1041,6 @@ namespace BeachScouter
                 // stop the capturing and write video
                 if (capture_device_index != -1) // camera capture
                 {
-                    /*
-                    for (int i = 0; i < buffer.Count; i++)
-                        videoWriter.WriteFrame(buffer[i]);
-                    buffer.Clear();
-                    videoWriter.Dispose();
-                    createScreeshot(start_time);
-                    */
                     start_time = Game.Current_rally.Start_time;
                     WriteRallyVideoThread writevideoobject = new WriteRallyVideoThread(buffer, videoWriter, start_time);
                     writevideoobject.donewritingrallyvideo += new DoneWritingRallyVideoEventHandler(writevideothread_donewriting);
@@ -1624,6 +1617,7 @@ namespace BeachScouter
             long position_time = 0;
             if (capture_review != null)
             {
+                /*
                 for (int i = 0; i < List_timestamps.Count-1; i++)
                 {
 
@@ -1633,8 +1627,8 @@ namespace BeachScouter
                     double framecount = temp.GetCaptureProperty(CAP_PROP.CV_CAP_PROP_FRAME_COUNT);
                     temp.SetCaptureProperty(CAP_PROP.CV_CAP_PROP_POS_FRAMES, framecount);
                     position_time = position_time + (long)temp.GetCaptureProperty(CAP_PROP.CV_CAP_PROP_POS_MSEC);
-                    //MessageBox.Show("" + position_time);
                 }
+                 * */
                 position_time = position_time + (long)capture_review.GetCaptureProperty(CAP_PROP.CV_CAP_PROP_POS_MSEC);
 
             }
@@ -1997,7 +1991,6 @@ namespace BeachScouter
                     {
                         int interval = (int)Math.Ceiling((1000 / fps)) - 3;
                         timer_review_capture.Interval = interval;
-                        Console.WriteLine("" + interval);
                     }
                     else
                     {
