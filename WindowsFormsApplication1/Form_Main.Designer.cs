@@ -149,7 +149,6 @@ namespace BeachScouter
             this.toolStripButton12 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton14 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton15 = new System.Windows.Forms.ToolStripButton();
-            this.backgroundWorker_capture_new_move = new System.ComponentModel.BackgroundWorker();
             this.timer_review_capture = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -1538,12 +1537,6 @@ namespace BeachScouter
             this.toolStripButton15.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton15.Text = "toolStripButton15";
             // 
-            // backgroundWorker_capture_new_move
-            // 
-            this.backgroundWorker_capture_new_move.WorkerSupportsCancellation = true;
-            this.backgroundWorker_capture_new_move.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker_capture_new_move_DoWork);
-            this.backgroundWorker_capture_new_move.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker_capture_new_move_RunWorkerCompleted);
-            // 
             // timer_review_capture
             // 
             this.timer_review_capture.Interval = 30;
@@ -1575,35 +1568,35 @@ namespace BeachScouter
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.openToolStripMenuItem.Text = "Open...";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // newGameToolStripMenuItem
             // 
             this.newGameToolStripMenuItem.Name = "newGameToolStripMenuItem";
-            this.newGameToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newGameToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.newGameToolStripMenuItem.Text = "New...";
             this.newGameToolStripMenuItem.Click += new System.EventHandler(this.newGameToolStripMenuItem_Click);
             // 
             // exportVideoToolStripMenuItem
             // 
             this.exportVideoToolStripMenuItem.Name = "exportVideoToolStripMenuItem";
-            this.exportVideoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exportVideoToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.exportVideoToolStripMenuItem.Text = "Export...";
             this.exportVideoToolStripMenuItem.Click += new System.EventHandler(this.exportVideoToolStripMenuItem_Click);
             // 
             // quitToolStripMenuItem
             // 
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.quitToolStripMenuItem.Text = "Quit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
             // 
@@ -1761,7 +1754,6 @@ namespace BeachScouter
         public System.Windows.Forms.TextBox textBox_scoreteamup;
         public System.Windows.Forms.TextBox textBox_setcount;
         public System.Windows.Forms.TextBox textBox_set;
-        private System.ComponentModel.BackgroundWorker backgroundWorker_capture_new_move;
         private System.Windows.Forms.GroupBox groupBox_reviewerbackgrounddown;
         private System.Windows.Forms.GroupBox groupBox_reviewerbackground;
         private System.Windows.Forms.PictureBox pictureBox_reviewercamera;

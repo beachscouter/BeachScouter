@@ -159,8 +159,6 @@ namespace BeachScouter
         private void newGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
   
-            if (capture_device_index != -1)
-                backgroundWorker_capture_new_move.CancelAsync();
 
 
             if (capture != null)
@@ -202,7 +200,6 @@ namespace BeachScouter
         {
 
             timer_review_capture.Stop();
-            backgroundWorker_capture_new_move.CancelAsync();
             Application.Idle -= ProcessFrame;
 
             if (capture != null)
@@ -418,89 +415,11 @@ namespace BeachScouter
      
 
 
-        // handles the video capture for one move
-        private void backgroundWorker_capture_new_move_DoWork(object sender, DoWorkEventArgs e)
-        {
-            
-            
-            object myLock = new object();
-            
-            // videos are identified by a long-identifier(start_time)
-            long start_time;
-            
-            int codec = Emgu.CV.CvInvoke.CV_FOURCC('P', 'I', 'M', '1');
-            BackgroundWorker capture_new_move = sender as BackgroundWorker;
-            if (e.Argument is Int64)
-            {
-                start_time = (Int64)e.Argument;
-                e.Result = start_time;
-                while (true)
-                {
-                    if (capture_new_move.CancellationPending)
-                        break;
-
-                    Image<Bgr, Byte> frame;
-                        if (capture != null)
-                        {
-                            Console.WriteLine(capture.GetCaptureProperty(CAP_PROP.CV_CAP_PROP_FPS));
-
-                            try
-                            {
-                                frame = (capture).QueryFrame();
-                                if (frame != null)
-                                { 
-                                    videoWriter.WriteFrame(frame);
-                                }
-                 
-                            }
-                            catch (AccessViolationException) { Console.WriteLine("EXCEPTION: AccessViolationException"); }
-                        }
-                    }
-
-                
-            }
-
-        }
 
 
-        private void backgroundWorker_capture_new_move_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            long start_time;
-            if (e.Result is Int64)
-            {
-                start_time = (Int64)e.Result;
-                createScreeshot(start_time);
-            }
-        }
 
 
-        private void createScreeshot(long start_time)
-        {
-            Bitmap screenshot = capture_stream.createScreenshot(start_time, false);
-            setScreeshot(screenshot);
 
-        }
-
-        private void setScreeshot(Bitmap screenshot)
-        {
-            if (screenshot != null)
-            {
-
-                imageList_screenshots.Images.Add(screenshot);
-
-                int screenshot_index = listView_screenshots.Items.Count;
-                ListViewItem screenshot_item = new ListViewItem("", screenshot_index);
-
-                listView_screenshots.Items.Add(screenshot_item);
-                listView_screenshots.LargeImageList = imageList_screenshots;
-
-                listView_screenshots.Refresh();
-
-                listView_screenshots.EnsureVisible(listView_screenshots.Items.Count - 1);
-
-            }
-
-        }
 
 
 
@@ -1120,7 +1039,7 @@ namespace BeachScouter
                 
 
                 // stop the capturing and write video
-                if (capture_device_index != -1)
+                if (capture_device_index != -1) // camera capture
                 {
                     start_time = Game.Current_rally.Start_time;
                     createScreeshot(start_time);
@@ -1129,13 +1048,14 @@ namespace BeachScouter
                     buffer.Clear();
                     videoWriter.Dispose();
                 }
-                else
+                else // loaded video
                 {
                     endmilisecond = axWindowsMediaPlayer_live.Ctlcontrols.currentPosition;
-                    WriteVideoThread writevideoobject = new WriteVideoThread(startmilisecond, endmilisecond, loaded_videopath, videoWriter);
-                    writeRallyVideo(writevideoobject);
                     start_time = Game.Current_rally.Start_time;
-                    createScreeshot(start_time);
+                    WriteVideoThread writevideoobject = new WriteVideoThread(startmilisecond, endmilisecond, loaded_videopath, videoWriter, start_time);
+                    writevideoobject.donewritingrallyvideo += new DoneWritingRallyVideoEventHandler(writevideothread_donewriting);
+                    writeRallyVideo(writevideoobject);
+                    
                 }
 
 
@@ -1145,6 +1065,58 @@ namespace BeachScouter
 
             }
         }
+
+
+        // This is called when a WriteVideoThread thread throws a DoneWritingRallyVideoEvent
+        private void writevideothread_donewriting(object sender, DoneWritingRallyVideoEventArgs e)
+        {
+            long videoid = e.videoID();
+            createScreeshot(videoid);
+        }
+
+
+
+
+
+        private void createScreeshot(long start_time)
+        {
+            Bitmap screenshot = capture_stream.createScreenshot(start_time, false);
+            setScreeshot(screenshot);
+        }
+
+        private delegate void AddScreenshotToListViewEventHandler(Bitmap screenshot);
+        private void setScreeshot(Bitmap screenshot)
+        {
+            if (this.listView_screenshots.InvokeRequired)
+            {
+                this.listView_screenshots.Invoke(new AddScreenshotToListViewEventHandler(this.setScreeshot), screenshot);
+            }
+            else
+            {
+                if (screenshot != null)
+                {
+
+                    imageList_screenshots.Images.Add(screenshot);
+
+                    int screenshot_index = listView_screenshots.Items.Count;
+                    ListViewItem screenshot_item = new ListViewItem("", screenshot_index);
+
+                    listView_screenshots.Items.Add(screenshot_item);
+
+
+                    listView_screenshots.LargeImageList = imageList_screenshots;
+
+                    listView_screenshots.Refresh();
+
+                    listView_screenshots.EnsureVisible(listView_screenshots.Items.Count - 1);
+
+                }
+            }
+
+        }
+
+
+
 
         private void button_bigPoint_Click(object sender, EventArgs e)
         {
@@ -2985,6 +2957,10 @@ namespace BeachScouter
                     }
                 }
         }
+
+        
+
+        
 
         
 

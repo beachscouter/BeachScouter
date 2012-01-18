@@ -116,6 +116,7 @@
     <Compile Include="CaptureStream.cs" />
     <Compile Include="BrowseDialogState.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="DoneWritingRallyVideoEventArgs.cs" />
     <Compile Include="ExportVideoThread.cs" />
     <Compile Include="ExportXML.cs" />
     <Compile Include="Form_Main.cs">

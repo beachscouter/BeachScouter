@@ -84,14 +84,16 @@ namespace BeachScouter
         {
 
             String video_name = start_time.ToString();
-            Capture capture_move;
-            Image<Bgr, Byte> screenshot =  new Image<Bgr, Byte>(64, 48);
+            Capture capture_move = null;
+            Image<Bgr, Byte> screenshot = new Image<Bgr, Byte>(64, 48);
             Bitmap bmp = new Bitmap(screenshotwidth, screenshotheight);
 
        
             try
             {
                 String videopath = Program.getConfiguration().Mediafolderpath + @"\" + video_name + ".mpg";
+
+                
                 capture_move = new Capture(videopath);
 
                 double frame_number = 0;
@@ -102,11 +104,13 @@ namespace BeachScouter
 
                 capture_move.SetCaptureProperty(CAP_PROP.CV_CAP_PROP_POS_FRAMES, frame_number / 2);
 
+                
                 screenshot = capture_move.QueryFrame();
 
+                
 
             }
-            catch (NullReferenceException) { Console.WriteLine("unreadable video file"); }
+            catch (NullReferenceException) { Console.WriteLine("unreadable video file in capture stream"); }
 
             if (screenshot != null)
             {
@@ -140,10 +144,12 @@ namespace BeachScouter
                 rect = new Rectangle((84 - stringlength) / 2 - 1, 53, screenshotwidth-1, screenshotheight-1);
                 drawBrush = new SolidBrush(Color.White);
                 gBmp.DrawString(current_time, drawFont, drawBrush, rect);
-                
+
 
                 return bmp;
             }
+
+
 
             // If we dont have a screenshot because we clicked to fast. We basically dont have a video file
             return null;
