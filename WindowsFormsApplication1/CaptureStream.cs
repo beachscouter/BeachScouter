@@ -95,15 +95,6 @@ namespace BeachScouter
 
                 
                 capture_move = new Capture(videopath);
-
-                double frame_number = 0;
-                capture_move.SetCaptureProperty(CAP_PROP.CV_CAP_PROP_POS_FRAMES, 0);
-                while (capture_move.QueryFrame() != null)
-                    frame_number++;
-
-
-                capture_move.SetCaptureProperty(CAP_PROP.CV_CAP_PROP_POS_FRAMES, frame_number / 2);
-
                 
                 screenshot = capture_move.QueryFrame();
 

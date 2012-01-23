@@ -17,7 +17,6 @@ using System.Drawing.Drawing2D;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-
 using Splicer;
 using Splicer.Timeline;
 using Splicer.Renderer;using System.Threading;
@@ -28,6 +27,9 @@ namespace BeachScouter
     {
         /***************************************************************************************************************************/
         /************************************** VARIABLE DEFINITIONS ***************************************************************/
+        private delegate void UpdateProgressbarExportEventHandler(int value);
+        private delegate void UpdateProgressbarRallyWritingEventHandler(int value, int maxvalue);
+
         Form configuration_form;
         Configuration configuration;
 
@@ -951,7 +953,9 @@ namespace BeachScouter
                 
                 String move_identifier = start_time.ToString();
                 String videopath = Program.getConfiguration().Mediafolderpath + @"\" + move_identifier + ".mpg";
-                this.videoWriter = new VideoWriter(videopath, Emgu.CV.CvInvoke.CV_FOURCC('P', 'I', 'M', '1'), 25, 640, 480, true);
+
+                if (capture_device_index != -1)
+                    this.videoWriter = new VideoWriter(videopath, Emgu.CV.CvInvoke.CV_FOURCC('P', 'I', 'M', '1'), 25, 640, 480, true);
 
 
                 // start a new video capture from video
@@ -959,7 +963,7 @@ namespace BeachScouter
                 {
                     Capture tempcapture = new Capture(loaded_videopath);
                     int tempfps = (int)tempcapture.GetCaptureProperty(CAP_PROP.CV_CAP_PROP_FPS);
-                    this.videoWriter = new VideoWriter(videopath, Emgu.CV.CvInvoke.CV_FOURCC('P', 'I', 'M', '1'), tempfps, 640, 480, true);
+                    //this.videoWriter = new VideoWriter(videopath, Emgu.CV.CvInvoke.CV_FOURCC('P', 'I', 'M', '1'), tempfps, 640, 480, true);
                     startmilisecond = axWindowsMediaPlayer_live.Ctlcontrols.currentPosition;
                     axWindowsMediaPlayer_live.Ctlcontrols.play();
                     tempcapture.Dispose();
@@ -1043,15 +1047,16 @@ namespace BeachScouter
                 {
                     start_time = Game.Current_rally.Start_time;
                     WriteRallyVideoThread writevideoobject = new WriteRallyVideoThread(buffer, videoWriter, start_time);
-                    writevideoobject.donewritingrallyvideo += new DoneWritingRallyVideoEventHandler(writevideothread_donewriting);
+                    writevideoobject.donewritingrallyvideo += new DoneWritingRallyVideoEventHandler(writevideothread_donewritingvideo);
                     writeRallyVideoFromBuffer(writevideoobject);
                 }
                 else // loaded video
                 {
                     endmilisecond = axWindowsMediaPlayer_live.Ctlcontrols.currentPosition;
                     start_time = Game.Current_rally.Start_time;
-                    WriteRallyVideoThread writevideoobject = new WriteRallyVideoThread(startmilisecond, endmilisecond, loaded_videopath, videoWriter, start_time);
-                    writevideoobject.donewritingrallyvideo += new DoneWritingRallyVideoEventHandler(writevideothread_donewriting);
+                    WriteRallyVideoThread writevideoobject = new WriteRallyVideoThread(startmilisecond, endmilisecond, loaded_videopath, null, start_time);
+                    writevideoobject.donewritingrallyvideo += new DoneWritingRallyVideoEventHandler(writevideothread_donewritingvideo);
+                    writevideoobject.donewritingrallyframe += new DoneWritingRallyFrameEventHandler(writevideothread_donewritingframe);
                     writeRallyVideoFromLoaded(writevideoobject);
                     
                 }
@@ -1064,9 +1069,29 @@ namespace BeachScouter
             }
         }
 
+        // This is called when a WriteVideoThread thread throws a DoneWritingRallyFrameEvent
+        private void writevideothread_donewritingframe(object sender, DoneWritingRallyFrameEventArgs e)
+        {
+            updateProgressbar_writingrally(e.CurrentFrame(), e.TotalFrames());
+        }
+
+        private void updateProgressbar_writingrally(int value, int maxvalue)
+        {
+            if (this.progressBar_writingrally.InvokeRequired)
+                this.progressBar_writingrally.Invoke(new UpdateProgressbarRallyWritingEventHandler(this.updateProgressbar_writingrally), value, maxvalue);
+            else
+            {
+                progressBar_writingrally.Visible = true;
+                progressBar_writingrally.Maximum = maxvalue;
+                progressBar_writingrally.Value = value;
+                if (progressBar_writingrally.Value == progressBar_writingrally.Maximum)
+                    progressBar_writingrally.Visible = false;
+            }
+        }
+
 
         // This is called when a WriteVideoThread thread throws a DoneWritingRallyVideoEvent
-        private void writevideothread_donewriting(object sender, DoneWritingRallyVideoEventArgs e)
+        private void writevideothread_donewritingvideo(object sender, DoneWritingRallyVideoEventArgs e)
         {
             long videoid = e.videoID();
             createScreeshot(videoid);
@@ -1986,11 +2011,12 @@ namespace BeachScouter
                     capture_review = null; // delete the old one
                     String videopath = Program.getConfiguration().Mediafolderpath + @"\" + video_name + ".mpg";
                     this.capture_review = new Capture(videopath);
-                    double fps = capture_review.GetCaptureProperty(CAP_PROP.CV_CAP_PROP_FPS);
+                    double fps = capture_review.GetCaptureProperty(CAP_PROP.CV_CAP_PROP_FPS); 
                     if (fps > 0)
                     {
                         int interval = (int)Math.Ceiling((1000 / fps)) - 3;
                         timer_review_capture.Interval = interval;
+
                     }
                     else
                     {
@@ -2005,11 +2031,14 @@ namespace BeachScouter
                 double frame_number = 0;
                 if (capture_review != null)
                 {
-                    this.capture_review.SetCaptureProperty(CAP_PROP.CV_CAP_PROP_POS_FRAMES, 0);
+                    //this.capture_review.SetCaptureProperty(CAP_PROP.CV_CAP_PROP_POS_FRAMES, 0);
                     while (capture_review.QueryFrame() != null)
                         frame_number++;
 
-                    this.capture_review.SetCaptureProperty(CAP_PROP.CV_CAP_PROP_POS_FRAMES, 0);
+                    String videopath = Program.getConfiguration().Mediafolderpath + @"\" + video_name + ".mpg";
+                    this.capture_review.Dispose();
+                    this.capture_review = new Capture(videopath);
+                   // this.capture_review.SetCaptureProperty(CAP_PROP.CV_CAP_PROP_POS_FRAMES, 0);
                 }
                 trackBar_reviewervideo.Maximum = (int)frame_number;
                 trackBar_reviewervideo.Value = 0;
@@ -2941,18 +2970,18 @@ namespace BeachScouter
 
 
         // This gets called when the export video thread was done appending a rally video
-        private delegate void UpdateProgressbarEventHandler(int value);
+        
         private void updateProgressbarEventFired(object sender, ExportVideoProgressEventArgs e)
         {
-            updateProgressbar(e.State());
+            updateProgressbar_export(e.State());
         }
 
 
-        private void updateProgressbar(int value)
+        private void updateProgressbar_export(int value)
         {
             if (this.progressBar_status.InvokeRequired)
             {
-                this.progressBar_status.Invoke(new UpdateProgressbarEventHandler(this.updateProgressbar), value);
+                this.progressBar_status.Invoke(new UpdateProgressbarExportEventHandler(this.updateProgressbar_export), value);
             }
             else
             {
@@ -3004,8 +3033,7 @@ namespace BeachScouter
                 }
         }
 
-        
-
+ 
         
 
         

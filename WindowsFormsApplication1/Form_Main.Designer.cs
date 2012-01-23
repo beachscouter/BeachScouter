@@ -162,6 +162,7 @@ namespace BeachScouter
             this.openVideoDialog = new System.Windows.Forms.OpenFileDialog();
             this.progressBar_status = new System.Windows.Forms.ProgressBar();
             this.labelstatus_videosource = new System.Windows.Forms.Label();
+            this.progressBar_writingrally = new System.Windows.Forms.ProgressBar();
             this.statusStrip1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.tabControl_main.SuspendLayout();
@@ -248,6 +249,7 @@ namespace BeachScouter
             // tabPage_live
             // 
             this.tabPage_live.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage_live.Controls.Add(this.progressBar_writingrally);
             this.tabPage_live.Controls.Add(this.button_timeout);
             this.tabPage_live.Controls.Add(this.groupBox_satzcount);
             this.tabPage_live.Controls.Add(this.button_switchteams);
@@ -707,6 +709,7 @@ namespace BeachScouter
             // tabPage_reviewer
             // 
             this.tabPage_reviewer.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage_reviewer.Controls.Add(this.button_backtolive);
             this.tabPage_reviewer.Controls.Add(this.groupBox_reviewerbackground);
             this.tabPage_reviewer.Location = new System.Drawing.Point(4, 25);
             this.tabPage_reviewer.Name = "tabPage_reviewer";
@@ -719,7 +722,6 @@ namespace BeachScouter
             this.groupBox_reviewerbackground.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox_reviewerbackground.Controls.Add(this.button_backtolive);
             this.groupBox_reviewerbackground.Controls.Add(this.button_newcalibration);
             this.groupBox_reviewerbackground.Controls.Add(this.panel_reviewerright);
             this.groupBox_reviewerbackground.Controls.Add(this.checkBox_calibrationlines);
@@ -734,11 +736,12 @@ namespace BeachScouter
             // 
             // button_backtolive
             // 
+            this.button_backtolive.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_backtolive.Image = global::BeachScouter.Properties.Resources.backarrow;
             this.button_backtolive.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button_backtolive.Location = new System.Drawing.Point(1, 506);
+            this.button_backtolive.Location = new System.Drawing.Point(6, 671);
             this.button_backtolive.Name = "button_backtolive";
-            this.button_backtolive.Size = new System.Drawing.Size(309, 69);
+            this.button_backtolive.Size = new System.Drawing.Size(1165, 49);
             this.button_backtolive.TabIndex = 62;
             this.button_backtolive.Text = "Back to Live Mode";
             this.button_backtolive.UseVisualStyleBackColor = true;
@@ -1209,6 +1212,7 @@ namespace BeachScouter
             // pictureBox_reviewercamera
             // 
             this.pictureBox_reviewercamera.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.pictureBox_reviewercamera.BackColor = System.Drawing.Color.LightGray;
             this.pictureBox_reviewercamera.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox_reviewercamera.Location = new System.Drawing.Point(316, 95);
             this.pictureBox_reviewercamera.Name = "pictureBox_reviewercamera";
@@ -1636,6 +1640,14 @@ namespace BeachScouter
             this.labelstatus_videosource.TabIndex = 34;
             this.labelstatus_videosource.Text = "Video source";
             // 
+            // progressBar_writingrally
+            // 
+            this.progressBar_writingrally.Location = new System.Drawing.Point(969, 429);
+            this.progressBar_writingrally.Name = "progressBar_writingrally";
+            this.progressBar_writingrally.Size = new System.Drawing.Size(199, 23);
+            this.progressBar_writingrally.TabIndex = 56;
+            this.progressBar_writingrally.Visible = false;
+            // 
             // Form_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1826,6 +1838,7 @@ namespace BeachScouter
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         public System.Windows.Forms.ListView listView_screenshots;
         private AxWMPLib.AxWindowsMediaPlayer axWindowsMediaPlayer_live;
+        private System.Windows.Forms.ProgressBar progressBar_writingrally;
     }
 }
 
