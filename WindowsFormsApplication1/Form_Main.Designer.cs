@@ -36,6 +36,7 @@ namespace BeachScouter
             this.listView_screenshots = new System.Windows.Forms.ListView();
             this.tabControl_main = new System.Windows.Forms.TabControl();
             this.tabPage_live = new System.Windows.Forms.TabPage();
+            this.progressBar_writingrally = new System.Windows.Forms.ProgressBar();
             this.button_timeout = new System.Windows.Forms.Button();
             this.groupBox_satzcount = new System.Windows.Forms.GroupBox();
             this.textBox_set = new System.Windows.Forms.TextBox();
@@ -49,7 +50,6 @@ namespace BeachScouter
             this.textBox_teamupname = new System.Windows.Forms.TextBox();
             this.textBox_scoreteamup = new System.Windows.Forms.TextBox();
             this.groupBox_livevideo = new System.Windows.Forms.GroupBox();
-            this.axWindowsMediaPlayer_live = new AxWMPLib.AxWindowsMediaPlayer();
             this.radioButton_playerdownright = new System.Windows.Forms.RadioButton();
             this.radioButton_playerdownleft = new System.Windows.Forms.RadioButton();
             this.radioButton_playerupright = new System.Windows.Forms.RadioButton();
@@ -70,8 +70,8 @@ namespace BeachScouter
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.tabPage_reviewer = new System.Windows.Forms.TabPage();
-            this.groupBox_reviewerbackground = new System.Windows.Forms.GroupBox();
             this.button_backtolive = new System.Windows.Forms.Button();
+            this.groupBox_reviewerbackground = new System.Windows.Forms.GroupBox();
             this.button_newcalibration = new System.Windows.Forms.Button();
             this.panel_reviewerright = new System.Windows.Forms.Panel();
             this.button_removerally = new System.Windows.Forms.Button();
@@ -162,7 +162,8 @@ namespace BeachScouter
             this.openVideoDialog = new System.Windows.Forms.OpenFileDialog();
             this.progressBar_status = new System.Windows.Forms.ProgressBar();
             this.labelstatus_videosource = new System.Windows.Forms.Label();
-            this.progressBar_writingrally = new System.Windows.Forms.ProgressBar();
+            this.axWindowsMediaPlayer_live = new AxWMPLib.AxWindowsMediaPlayer();
+            this.timer_testcamerafps = new System.Windows.Forms.Timer(this.components);
             this.statusStrip1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.tabControl_main.SuspendLayout();
@@ -170,7 +171,6 @@ namespace BeachScouter
             this.groupBox_satzcount.SuspendLayout();
             this.groupBox_team1.SuspendLayout();
             this.groupBox_livevideo.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer_live)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_livevideo)).BeginInit();
             this.groupBox_team2.SuspendLayout();
             this.tabPage_reviewer.SuspendLayout();
@@ -189,6 +189,7 @@ namespace BeachScouter
             this.panel_reviewervideocontrols.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_reviewervideo)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer_live)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -269,6 +270,14 @@ namespace BeachScouter
             this.tabPage_live.Size = new System.Drawing.Size(1174, 727);
             this.tabPage_live.TabIndex = 0;
             this.tabPage_live.Text = "Live";
+            // 
+            // progressBar_writingrally
+            // 
+            this.progressBar_writingrally.Location = new System.Drawing.Point(969, 429);
+            this.progressBar_writingrally.Name = "progressBar_writingrally";
+            this.progressBar_writingrally.Size = new System.Drawing.Size(199, 23);
+            this.progressBar_writingrally.TabIndex = 56;
+            this.progressBar_writingrally.Visible = false;
             // 
             // button_timeout
             // 
@@ -444,17 +453,6 @@ namespace BeachScouter
             this.groupBox_livevideo.Size = new System.Drawing.Size(645, 725);
             this.groupBox_livevideo.TabIndex = 51;
             this.groupBox_livevideo.TabStop = false;
-            // 
-            // axWindowsMediaPlayer_live
-            // 
-            this.axWindowsMediaPlayer_live.Enabled = true;
-            this.axWindowsMediaPlayer_live.Location = new System.Drawing.Point(3, 95);
-            this.axWindowsMediaPlayer_live.Name = "axWindowsMediaPlayer_live";
-            this.axWindowsMediaPlayer_live.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axWindowsMediaPlayer_live.OcxState")));
-            this.axWindowsMediaPlayer_live.Size = new System.Drawing.Size(640, 530);
-            this.axWindowsMediaPlayer_live.TabIndex = 79;
-            this.axWindowsMediaPlayer_live.Visible = false;
-            this.axWindowsMediaPlayer_live.ClickEvent += new AxWMPLib._WMPOCXEvents_ClickEventHandler(this.axWindowsMediaPlayer_live_ClickEvent);
             // 
             // radioButton_playerdownright
             // 
@@ -717,6 +715,19 @@ namespace BeachScouter
             this.tabPage_reviewer.TabIndex = 1;
             this.tabPage_reviewer.Text = "Review";
             // 
+            // button_backtolive
+            // 
+            this.button_backtolive.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_backtolive.Image = global::BeachScouter.Properties.Resources.backarrow;
+            this.button_backtolive.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button_backtolive.Location = new System.Drawing.Point(6, 671);
+            this.button_backtolive.Name = "button_backtolive";
+            this.button_backtolive.Size = new System.Drawing.Size(1165, 49);
+            this.button_backtolive.TabIndex = 62;
+            this.button_backtolive.Text = "Back to Live Mode";
+            this.button_backtolive.UseVisualStyleBackColor = true;
+            this.button_backtolive.Click += new System.EventHandler(this.button_backtolive_Click);
+            // 
             // groupBox_reviewerbackground
             // 
             this.groupBox_reviewerbackground.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -733,19 +744,6 @@ namespace BeachScouter
             this.groupBox_reviewerbackground.Size = new System.Drawing.Size(1168, 674);
             this.groupBox_reviewerbackground.TabIndex = 5;
             this.groupBox_reviewerbackground.TabStop = false;
-            // 
-            // button_backtolive
-            // 
-            this.button_backtolive.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_backtolive.Image = global::BeachScouter.Properties.Resources.backarrow;
-            this.button_backtolive.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button_backtolive.Location = new System.Drawing.Point(6, 671);
-            this.button_backtolive.Name = "button_backtolive";
-            this.button_backtolive.Size = new System.Drawing.Size(1165, 49);
-            this.button_backtolive.TabIndex = 62;
-            this.button_backtolive.Text = "Back to Live Mode";
-            this.button_backtolive.UseVisualStyleBackColor = true;
-            this.button_backtolive.Click += new System.EventHandler(this.button_backtolive_Click);
             // 
             // button_newcalibration
             // 
@@ -1213,10 +1211,12 @@ namespace BeachScouter
             // 
             this.pictureBox_reviewercamera.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.pictureBox_reviewercamera.BackColor = System.Drawing.Color.LightGray;
+            this.pictureBox_reviewercamera.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBox_reviewercamera.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox_reviewercamera.Location = new System.Drawing.Point(316, 95);
             this.pictureBox_reviewercamera.Name = "pictureBox_reviewercamera";
             this.pictureBox_reviewercamera.Size = new System.Drawing.Size(640, 480);
+            this.pictureBox_reviewercamera.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_reviewercamera.TabIndex = 5;
             this.pictureBox_reviewercamera.TabStop = false;
             this.pictureBox_reviewercamera.Click += new System.EventHandler(this.pictureBox_reviewercamera_Click);
@@ -1640,13 +1640,20 @@ namespace BeachScouter
             this.labelstatus_videosource.TabIndex = 34;
             this.labelstatus_videosource.Text = "Video source";
             // 
-            // progressBar_writingrally
+            // axWindowsMediaPlayer_live
             // 
-            this.progressBar_writingrally.Location = new System.Drawing.Point(969, 429);
-            this.progressBar_writingrally.Name = "progressBar_writingrally";
-            this.progressBar_writingrally.Size = new System.Drawing.Size(199, 23);
-            this.progressBar_writingrally.TabIndex = 56;
-            this.progressBar_writingrally.Visible = false;
+            this.axWindowsMediaPlayer_live.Enabled = true;
+            this.axWindowsMediaPlayer_live.Location = new System.Drawing.Point(3, 95);
+            this.axWindowsMediaPlayer_live.Name = "axWindowsMediaPlayer_live";
+            this.axWindowsMediaPlayer_live.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axWindowsMediaPlayer_live.OcxState")));
+            this.axWindowsMediaPlayer_live.Size = new System.Drawing.Size(640, 530);
+            this.axWindowsMediaPlayer_live.TabIndex = 79;
+            this.axWindowsMediaPlayer_live.Visible = false;
+            this.axWindowsMediaPlayer_live.ClickEvent += new AxWMPLib._WMPOCXEvents_ClickEventHandler(this.axWindowsMediaPlayer_live_ClickEvent);
+            // 
+            // timer_testcamerafps
+            // 
+            this.timer_testcamerafps.Interval = 1000;
             // 
             // Form_Main
             // 
@@ -1675,7 +1682,6 @@ namespace BeachScouter
             this.groupBox_team1.ResumeLayout(false);
             this.groupBox_team1.PerformLayout();
             this.groupBox_livevideo.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer_live)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_livevideo)).EndInit();
             this.groupBox_team2.ResumeLayout(false);
             this.groupBox_team2.PerformLayout();
@@ -1700,6 +1706,7 @@ namespace BeachScouter
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_reviewervideo)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer_live)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1839,6 +1846,7 @@ namespace BeachScouter
         public System.Windows.Forms.ListView listView_screenshots;
         private AxWMPLib.AxWindowsMediaPlayer axWindowsMediaPlayer_live;
         private System.Windows.Forms.ProgressBar progressBar_writingrally;
+        private System.Windows.Forms.Timer timer_testcamerafps;
     }
 }
 

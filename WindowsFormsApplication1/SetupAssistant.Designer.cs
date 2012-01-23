@@ -873,6 +873,7 @@
             this.Name = "SetupAssistant";
             this.Text = "SetupAssistant";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SetupAssistant_FormClosing);
+            this.Load += new System.EventHandler(this.SetupAssistant_Load);
             this.VisibleChanged += new System.EventHandler(this.SetupAssistant_VisibleChanged);
             this.tabControl_setup.ResumeLayout(false);
             this.tabPage_gamesettings.ResumeLayout(false);

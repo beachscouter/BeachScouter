@@ -17,9 +17,7 @@ using System.Drawing.Drawing2D;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using Splicer;
-using Splicer.Timeline;
-using Splicer.Renderer;using System.Threading;
+using System.Threading;
 
 namespace BeachScouter
 {
@@ -59,6 +57,7 @@ namespace BeachScouter
         private double startmilisecond; // for the rally recording out of the mdeia player
         private double endmilisecond;
         private List<Image<Bgr, Byte>> rallyframes; // capture all frames first before writing them out
+        private int review_timer_interval;
         /****************************/
 
 
@@ -74,6 +73,10 @@ namespace BeachScouter
         private Boolean calibrating = false;
         /******************************************/
 
+        private long start_timefps;
+        private long end_timefps;
+        private Boolean testingfps = false;
+        private int countfps;
 
         /******* Various control variables ********/
         // may vary from the configuration!!! 
@@ -378,6 +381,11 @@ namespace BeachScouter
                 capture = new Capture(i);
                 Application.Idle += ProcessFrame;
 
+                // Start fps test
+                testingfps = true;
+                start_timefps = System.DateTime.Now.Ticks;
+                countfps = 0;
+
                 pictureBox_livevideo.Visible = true;
             }
 
@@ -398,7 +406,16 @@ namespace BeachScouter
 
                             if (new_move)
                                 buffer.Add(nextFrame.Clone());
-                                //videoWriter.WriteFrame(nextFrame);
+
+                            if (testingfps)
+                                countfps++;
+
+                            if ((System.DateTime.Now.Ticks - start_timefps) > 10000 * 1000 && testingfps)
+                            {
+                                testingfps = false;
+                                fps = countfps;
+                            }
+
 
                             pictureBox_livevideo.Image = nextFrame.ToBitmap(pictureBox_livevideo.Width, pictureBox_livevideo.Height);
                             nextFrame = null;
@@ -955,7 +972,7 @@ namespace BeachScouter
                 String videopath = Program.getConfiguration().Mediafolderpath + @"\" + move_identifier + ".mpg";
 
                 if (capture_device_index != -1)
-                    this.videoWriter = new VideoWriter(videopath, Emgu.CV.CvInvoke.CV_FOURCC('P', 'I', 'M', '1'), 25, 640, 480, true);
+                    this.videoWriter = new VideoWriter(videopath, Emgu.CV.CvInvoke.CV_FOURCC('P', 'I', 'M', '1'), fps, 640, 480, true);
 
 
                 // start a new video capture from video
@@ -1103,6 +1120,7 @@ namespace BeachScouter
 
         private void createScreeshot(long start_time)
         {
+
             Bitmap screenshot = capture_stream.createScreenshot(start_time, false);
             setScreeshot(screenshot);
         }
@@ -2014,8 +2032,8 @@ namespace BeachScouter
                     double fps = capture_review.GetCaptureProperty(CAP_PROP.CV_CAP_PROP_FPS); 
                     if (fps > 0)
                     {
-                        int interval = (int)Math.Ceiling((1000 / fps)) - 3;
-                        timer_review_capture.Interval = interval;
+                        review_timer_interval = (int)Math.Ceiling((1000 / fps)) - 3;
+                        //timer_review_capture.Interval = interval;
 
                     }
                     else
@@ -2038,7 +2056,16 @@ namespace BeachScouter
                     String videopath = Program.getConfiguration().Mediafolderpath + @"\" + video_name + ".mpg";
                     this.capture_review.Dispose();
                     this.capture_review = new Capture(videopath);
-                   // this.capture_review.SetCaptureProperty(CAP_PROP.CV_CAP_PROP_POS_FRAMES, 0);
+
+                    /*
+                    if (capture_device_index != -1)
+                    {
+                        for (int i = 0; i < 10; i++)
+                            capture_review.QueryFrame();
+                        this.capture_review.SetCaptureProperty(CAP_PROP.CV_CAP_PROP_POS_FRAMES, 0);
+                    }
+
+                    */
                 }
                 trackBar_reviewervideo.Maximum = (int)frame_number;
                 trackBar_reviewervideo.Value = 0;
@@ -2050,9 +2077,11 @@ namespace BeachScouter
 
 
                 // After we loaded all the stuff we can finally play the video:
-                button_reviewerplaypause.Text = "Pause";
-                timer_review_capture.Start();
+               button_reviewerplaypause.Text = "Pause";
 
+               timer_review_capture.Start();
+
+               
 
                 if (calibration != null)
                 {
@@ -2815,6 +2844,7 @@ namespace BeachScouter
             }
 
             Game.Reviewing_rally.Finalized = finalized;
+
 
             Bitmap screenshot = capture_stream.createScreenshot(Game.Reviewing_rally.Start_time, finalized);
             if (screenshot != null)

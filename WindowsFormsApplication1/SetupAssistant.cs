@@ -57,9 +57,6 @@ namespace BeachScouter
             if (this.Visible == true)
             {
                 xmlDoc = new XmlOutput();
-
-                // Camera stuff
-                listCaptureDevices();
             }
             
         }
@@ -516,6 +513,11 @@ namespace BeachScouter
         private void SetupAssistant_FormClosing(object sender, FormClosingEventArgs e)
         {
             Application.Exit();
+        }
+
+        private void SetupAssistant_Load(object sender, EventArgs e)
+        {
+
         }
 
        

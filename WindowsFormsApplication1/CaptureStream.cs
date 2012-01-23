@@ -93,9 +93,14 @@ namespace BeachScouter
             {
                 String videopath = Program.getConfiguration().Mediafolderpath + @"\" + video_name + ".mpg";
 
-                
+               
+
                 capture_move = new Capture(videopath);
+
+                for (int i = 0; i < 15; i++)
+                    capture_move.QueryFrame();
                 
+
                 screenshot = capture_move.QueryFrame();
 
                 

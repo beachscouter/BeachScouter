@@ -13,9 +13,6 @@ using System.Globalization;
 using System.IO;
 using System.Threading;
 
-using Splicer;
-using Splicer.Timeline;
-using Splicer.Renderer;
 
 namespace BeachScouter
 {
